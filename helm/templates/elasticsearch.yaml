@@ -1,4 +1,4 @@
-{{- if eq .Values.env.DOC_ENGINE "elasticsearch" -}}
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -31,10 +31,6 @@ spec:
     matchLabels:
       {{- include "ragflow.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: elasticsearch
-  {{- with .Values.elasticsearch.deployment.strategy }}
-  strategy:
-    {{- . | toYaml | nindent 4 }}
-  {{- end }}
   template:
     metadata:
       labels:
@@ -128,4 +124,3 @@ spec:
       port: 9200
       targetPort: http
   type: {{ .Values.elasticsearch.service.type }}
-{{- end -}}

@@ -12,7 +12,7 @@ openssl rand -hex 16 | pbcopy
 
 ## Installation / Upgrade
 
-TODO
+The helm chart was taken and adapted from [the RAGFlow repository](https://github.com/infiniflow/ragflow/tree/main/helm), and the original is published under the Apache License 2.0. All modifications to the original are, as long as they are not contributed and merged back into the upstream original, available under the MIT license.
 
 ## Why RAGFlow?
 

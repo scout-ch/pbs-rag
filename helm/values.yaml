@@ -4,24 +4,11 @@
 imagePullSecrets: []
 
 env:
-  # The type of doc engine to use.
-  # Available options:
-  # - `elasticsearch` (default)
-  # - `infinity` (https://github.com/infiniflow/infinity)
-  # - `opensearch` (https://github.com/opensearch-project/OpenSearch)
-  # DOC_ENGINE: elasticsearch
-  DOC_ENGINE: infinity
-  # DOC_ENGINE: opensearch
-
   # The version of Elasticsearch.
   STACK_VERSION: "8.11.3"
 
   # The password for Elasticsearch
   ELASTIC_PASSWORD: infini_rag_flow_helm
-
-  # The password for OpenSearch.
-  # At least one uppercase letter, one lowercase letter, one digit, and one special character
-  OPENSEARCH_PASSWORD: infini_rag_flow_OS_01
 
   # The password for MySQL
   MYSQL_PASSWORD: infini_rag_flow_helm
@@ -37,7 +24,7 @@ env:
   REDIS_PASSWORD: infini_rag_flow_helm
 
   # The local time zone.
-  TIMEZONE: "Asia/Shanghai"
+  TIMEZONE: "Europe/Zurich"
 
   # Uncomment the following line if you have limited access to huggingface.co:
   # HF_ENDPOINT: https://hf-mirror.com
@@ -93,21 +80,6 @@ ragflow:
       enabled: true
       type: ClusterIP
 
-infinity:
-  image:
-    repository: infiniflow/infinity
-    tag: v0.6.0-dev5
-    pullPolicy: IfNotPresent
-    pullSecrets: []
-  storage:
-    className:
-    capacity: 5Gi
-  deployment:
-    strategy:
-    resources:
-  service:
-    type: ClusterIP
-
 elasticsearch:
   image:
     repository: elasticsearch
@@ -127,38 +99,17 @@ elasticsearch:
     className:
     capacity: 20Gi
   deployment:
-    strategy:
+    singleNode: true
+    antiAffinity: "soft"
+    esJavaOpts: "-Xmx96m -Xms96m"
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss
     resources:
       requests:
-        cpu: "4"
-        memory: "16Gi"
-  service:
-    type: ClusterIP
-
-opensearch:
-  image:
-    repository: opensearchproject/opensearch
-    tag: 2.19.1
-    pullPolicy: IfNotPresent
-    pullSecrets: []
-  initContainers:
-    alpine:
-      repository: alpine
-      tag: latest
-      pullPolicy: IfNotPresent
-    busybox:
-      repository: busybox
-      tag: latest
-      pullPolicy: IfNotPresent
-  storage:
-    className:
-    capacity: 20Gi
-  deployment:
-    strategy:
-    resources:
-      requests:
-        cpu: "4"
-        memory: "16Gi"
+        memory: "500Mi"
+        cpu: "100m"
+      limits:
+        memory: "1Gi"
+        cpu: "800m"
   service:
     type: ClusterIP
 
@@ -166,21 +117,6 @@ minio:
   image:
     repository: quay.io/minio/minio
     tag: RELEASE.2023-12-20T01-00-02Z
-    pullPolicy: IfNotPresent
-    pullSecrets: []
-  storage:
-    className:
-    capacity: 5Gi
-  deployment:
-    strategy:
-    resources:
-  service:
-    type: ClusterIP
-
-mysql:
-  image:
-    repository: mysql
-    tag: 8.0.39
     pullPolicy: IfNotPresent
     pullSecrets: []
   storage:
