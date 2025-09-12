@@ -1,4 +1,3 @@
-{{- if .Values.minio.deploy -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -103,4 +102,3 @@ spec:
       port: 9001
       targetPort: console
   type: {{ .Values.minio.service.type }}
-{{- end -}}
