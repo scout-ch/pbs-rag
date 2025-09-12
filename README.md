@@ -20,9 +20,7 @@ openssl rand -hex 16 | pbcopy
 ## Installation / Upgrade
 
 ```shell
-. .env # load .env as environment variables
-
-helm upgrade --install ragflow ./helm \
+. .env && helm upgrade --install ragflow ./helm \
   --set ingress.host="$APP_DOMAIN" \
   --set env.ELASTIC_PASSWORD="$ELASTIC_PASSWORD" \
   --set env.MYSQL_HOST="$MYSQL_HOST" \
@@ -30,7 +28,11 @@ helm upgrade --install ragflow ./helm \
   --set env.MYSQL_PASSWORD="$MYSQL_PASSWORD" \
   --set env.MYSQL_DBNAME="$MYSQL_DBNAME" \
   --set env.MINIO_PASSWORD="$MINIO_PASSWORD" \
-  --set env.REDIS_PASSWORD="$REDIS_PASSWORD"
+  --set env.REDIS_PASSWORD="$REDIS_PASSWORD" \
+  --set ragflow.service_conf.oauth.midata.issuer="$MIDATA_BASE_URL" \
+  --set ragflow.service_conf.oauth.midata.client_id="$MIDATA_CLIENT_ID" \
+  --set ragflow.service_conf.oauth.midata.client_secret="$MIDATA_CLIENT_SECRET" \
+  --set ragflow.service_conf.oauth.midata.redirect_uri="$MIDATA_OIDC_CALLBACK_URL"
 ```
 
 The helm chart was taken and adapted from [the RAGFlow repository](https://github.com/infiniflow/ragflow/tree/main/helm), and the original is published under the Apache License 2.0. All modifications to the original are, as long as they are not contributed and merged back into the upstream original, available under the MIT license.

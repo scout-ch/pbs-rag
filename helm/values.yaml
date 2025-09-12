@@ -53,6 +53,14 @@ ragflow:
   # inside the RAGFlow container
   # https://ragflow.io/docs/dev/configurations#service-configuration
   service_conf:
+    oauth:
+      midata:
+        display_name: MiData
+        client_id:
+        client_secret:
+        issuer: "https://pbs.puzzle.ch"
+        scope: openid email
+        redirect_uri: #"https://hostname/v1/user/oauth/callback/midata"
 
   # Optional yaml formatted override for the
   # llm_factories.json file inside the RAGFlow
