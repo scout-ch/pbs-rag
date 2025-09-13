@@ -11,6 +11,7 @@ This RAGFlow instance is explicitly not intended to directly build LLM pipelines
   - [ ] PDF brochures about education courses (used in Topkurs)
   - [ ] hering.scout.ch
   - [ ] Anker and other pdfs from the PBS download page
+  - [ ] J+S documentation relevant to scouting, if legally allowed
   - [ ] MiData documentation on docu.scout.ch and hitobito.readthedocs.io and github.com/hitobito/hitobito_pbs
   - [ ] thilo and/or "Pfaditechnik in Wort und Bild"
   - [ ] Regional or cantonal documentation
