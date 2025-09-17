@@ -36,6 +36,11 @@ data:
             include proxy.conf;
         }
 
+        location ~ ^/(mcp) {
+            proxy_pass http://localhost:9382;
+            include proxy.conf;
+        }
+
         location / {
             index index.html;
             try_files $uri $uri/ /index.html;

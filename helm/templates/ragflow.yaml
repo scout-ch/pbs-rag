@@ -40,6 +40,8 @@ spec:
         {{- with .Values.ragflow.image.pullPolicy }}
         imagePullPolicy: {{ . }}
         {{- end }}
+        command:
+          - "./entrypoint.sh"
         ports:
           - containerPort: 80
             name: http
@@ -72,6 +74,32 @@ spec:
         resources:
           {{- . | toYaml | nindent 10 }}
         {{- end }}
+      {{- if .Values.ragflow.mcp.enabled }}
+      - name: mcp
+        image: {{ .Values.ragflow.image.repository }}:{{ .Values.ragflow.image.tag }}
+        {{- with .Values.ragflow.image.pullPolicy }}
+        imagePullPolicy: {{ . }}
+        {{- end }}
+        command:
+          - "./entrypoint.sh"
+          - "--disable-webserver"
+          - "--disable-taskexecutor"
+          - "--enable-mcpserver"
+          - "--mcp-host=0.0.0.0"
+          - "--mcp-port=9382"
+          - "--mcp-base-url=http://127.0.0.1:9380"
+          - "--mcp-script-path=/ragflow/mcp/server/server.py"
+          - "--mcp-mode=self-host"
+          - "--no-transport-sse-enabled"
+          - {{ (printf "--mcp-host-api-key=%s" (.Values.ragflow.mcp.ragflowApiKey | required "An API key is required when activating the MCP server")) | quote }}
+        ports:
+          - containerPort: 9382
+            name: http-mcp
+        {{- with .Values.ragflow.mcp.deployment.resources }}
+        resources:
+          {{- . | toYaml | nindent 10 }}
+        {{- end }}
+      {{- end }}
       volumes:
         - name: nginx-config-volume
           configMap:

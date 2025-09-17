@@ -18,7 +18,7 @@ This RAGFlow instance is explicitly not intended to directly build LLM pipelines
   - [ ] (optional) Cudesch PDFs from issuu that aren't yet on cudesch.scout.ch
 - [ ] Automate document re-indexing when some documentation changes
 - [ ] Set up multiple datasets / knowledge bases or another way to filter the documents by relevance to common use cases (e.g. only documents for J+S Basis courses)
-- [ ] MCP server so that LLMs can use this tool
+- [x] MCP server so that LLMs can use this tool
 - [ ] Set up multilinguality / separate datasets for the French and Italian versions of the documentation
 - [ ] Set up some automated end-to-end testing
 - [ ] Set up renovate bot to auto-update all third-party software
@@ -57,7 +57,12 @@ openssl rand -hex 16 | pbcopy
   --set ragflow.service_conf.oauth.midata.issuer="$MIDATA_BASE_URL" \
   --set ragflow.service_conf.oauth.midata.client_id="$MIDATA_CLIENT_ID" \
   --set ragflow.service_conf.oauth.midata.client_secret="$MIDATA_CLIENT_SECRET" \
-  --set ragflow.service_conf.oauth.midata.redirect_uri="$MIDATA_OIDC_CALLBACK_URL"
+  --set ragflow.service_conf.oauth.midata.redirect_uri="$MIDATA_OIDC_CALLBACK_URL" \
+  --set ragflow.mcp.enabled=true \
+  --set ragflow.mcp.ragflowApiKey="$MCP_RAGFLOW_API_KEY"
+
+## or, on subsequent deployments
+helm upgrade --reuse-values ragflow ./helm
 ```
 
 The helm chart was taken and adapted from [the RAGFlow repository](https://github.com/infiniflow/ragflow/tree/main/helm), and the original is published under the Apache License 2.0. All modifications to the original are, as long as they are not contributed and merged back into the upstream original, available under the MIT license.
