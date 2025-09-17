@@ -5,8 +5,10 @@ This is a tool which can index documents such as PDFs and Markdown files and the
 This RAGFlow instance is explicitly not intended to directly build LLM pipelines and agents, even though RAGFlow of course supports this. LLM pipelines should be implemented externally and may use this tool via MCP to look up relevant scouting-specific information.
 
 ## Features and roadmap
-- [ ] MiData login
+- [ ] MiData login (currently, the MiData test instance is used, waiting for approval of a production OAuth app)
+- [ ] Refactor helm chart to be more idiomatic, use separate config maps for each service and a separate deployment for the MCP server
 - [ ] Add more data sources
+  - [ ] Feature parity with pfadi.ai/cudesch and replace the Supabase implementation there with calls to RAGFlow
   - [ ] All cudesch content from cudesch.scout.ch
   - [ ] PDF brochures about education courses (used in Topkurs)
   - [ ] hering.scout.ch
