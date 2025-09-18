@@ -38,7 +38,7 @@ spec:
         {{- include "ragflow.labels" . | nindent 8 }}
         app.kubernetes.io/component: redis
       annotations:
-        checksum/config-env: {{ include (print $.Template.BasePath "/env.yaml") . | sha256sum }}
+        checksum/redis-secrets: {{ include (print $.Template.BasePath "/redis-secrets.yaml") . | sha256sum }}
     spec:
       {{- if or .Values.imagePullSecrets .Values.redis.image.pullSecrets }}
       imagePullSecrets:
@@ -62,7 +62,7 @@ spec:
             - "exec redis-server --requirepass ${REDIS_PASSWORD} --maxmemory 128mb --maxmemory-policy allkeys-lru"
           envFrom:
             - secretRef:
-                name: {{ include "ragflow.fullname" . }}-env-config
+                name: {{ include "ragflow.fullname" . }}-redis-secrets
           ports:
             - containerPort: 6379
               name: redis
