@@ -38,7 +38,7 @@ spec:
         app.kubernetes.io/component: elasticsearch
       annotations:
         checksum/config-es: {{ include (print $.Template.BasePath "/elasticsearch-config.yaml") . | sha256sum }}
-        checksum/config-env: {{ include (print $.Template.BasePath "/env.yaml") . | sha256sum }}
+        checksum/secrets-es: {{ include (print $.Template.BasePath "/elasticsearch-secrets.yaml") . | sha256sum }}
     spec:
       {{- if or .Values.imagePullSecrets .Values.elasticsearch.image.pullSecrets }}
       imagePullSecrets:
@@ -79,7 +79,7 @@ spec:
         {{- end }}
         envFrom:
           - secretRef:
-              name: {{ include "ragflow.fullname" . }}-env-config
+              name: {{ include "ragflow.fullname" . }}-es-secrets
           - configMapRef:
               name: {{ include "ragflow.fullname" . }}-es-config
         ports:
