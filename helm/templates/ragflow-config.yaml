@@ -2,6 +2,22 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: ragflow-config
+data:
+  {{- /*
+  Use host names derived from internal cluster DNS
+  */}}
+  REDIS_HOST: {{ printf "%s-redis.%s.svc" (include "ragflow.fullname" .) .Release.Namespace | quote }}
+  MYSQL_HOST: {{ .Values.env.MYSQL_HOST | required "MYSQL_HOST is required" | quote }}
+  MYSQL_DBNAME: {{ .Values.env.MYSQL_DBNAME | required "MYSQL_DBNAME is required" | quote }}
+  MINIO_HOST: {{ printf "%s-minio.%s.svc" (include "ragflow.fullname" .) .Release.Namespace | quote }}
+  ES_HOST: {{ printf "%s-es.%s.svc" (include "ragflow.fullname" .) .Release.Namespace | quote }}
+  DOC_BULK_SIZE: {{ .Values.env.DOC_BULK_SIZE | quote }}
+  EMBEDDING_BATCH_SIZE: {{ .Values.env.EMBEDDING_BATCH_SIZE | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: ragflow-service-config
 data:
   {{- with .Values.ragflow.service_conf }}

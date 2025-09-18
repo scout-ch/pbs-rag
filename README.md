@@ -6,7 +6,7 @@ This RAGFlow instance is explicitly not intended to directly build LLM pipelines
 
 ## Features and roadmap
 - [ ] MiData login (currently, the MiData test instance is used, waiting for approval of a production OAuth app)
-- [ ] Refactor helm chart to be more idiomatic, use separate config maps for each service and a separate deployment for the MCP server
+- [ ] Refactor helm chart to be more idiomatic, use a separate deployment for the MCP server
 - [ ] Add more data sources
   - [ ] Feature parity with pfadi.ai/cudesch and replace the Supabase implementation there with calls to RAGFlow
   - [ ] All cudesch content from cudesch.scout.ch
