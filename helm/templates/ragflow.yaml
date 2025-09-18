@@ -105,10 +105,10 @@ spec:
       volumes:
         - name: nginx-config-volume
           configMap:
-            name: nginx-config
+            name: {{ include "ragflow.fullname" . }}-nginx-config
         - name: service-conf-volume
           configMap:
-            name: ragflow-service-config
+            name: {{ include "ragflow.fullname" . }}-service-config
 ---
 apiVersion: v1
 kind: Service

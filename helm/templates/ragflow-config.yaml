@@ -2,23 +2,35 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ragflow-config
+  name: {{ include "ragflow.fullname" . }}-ragflow-config
 data:
+  {{- range $key, $val := .Values.env }}
+  {{- if $val }}
+  {{ $key }}: {{ quote $val }}
+  {{- end }}
+  {{- end }}
   {{- /*
   Use host names derived from internal cluster DNS
   */}}
   REDIS_HOST: {{ printf "%s-redis.%s.svc" (include "ragflow.fullname" .) .Release.Namespace | quote }}
-  MYSQL_HOST: {{ .Values.env.MYSQL_HOST | required "MYSQL_HOST is required" | quote }}
-  MYSQL_DBNAME: {{ .Values.env.MYSQL_DBNAME | required "MYSQL_DBNAME is required" | quote }}
+  MYSQL_HOST: {{ .Values.ragflow.mysql.host | required "ragflow.mysql.host is required" | quote }}
+  MYSQL_USER: {{ .Values.ragflow.mysql.user | required "ragflow.mysql.user is required" | quote }}
+  MYSQL_DBNAME: {{ .Values.ragflow.mysql.dbname | required "ragflow.mysql.dbname is required" | quote }}
   MINIO_HOST: {{ printf "%s-minio.%s.svc" (include "ragflow.fullname" .) .Release.Namespace | quote }}
   ES_HOST: {{ printf "%s-es.%s.svc" (include "ragflow.fullname" .) .Release.Namespace | quote }}
-  DOC_BULK_SIZE: {{ .Values.env.DOC_BULK_SIZE | quote }}
-  EMBEDDING_BATCH_SIZE: {{ .Values.env.EMBEDDING_BATCH_SIZE | quote }}
+  DOC_BULK_SIZE: {{ .Values.ragflow.docBulkSize | quote }}
+  EMBEDDING_BATCH_SIZE: {{ .Values.ragflow.embeddingBatchSize | quote }}
+  {{- with .Values.ragflow.hfEndpoint }}
+  HF_ENDPOINT: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.ragflow.maxContentLength }}
+  MAX_CONTENT_LENGTH: {{ . | quote }}
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ragflow-service-config
+  name: {{ include "ragflow.fullname" . }}-service-config
 data:
   {{- with .Values.ragflow.service_conf }}
   local.service_conf.yaml: |
@@ -32,7 +44,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-config
+  name: {{ include "ragflow.fullname" . }}-nginx-config
 data:
   ragflow.conf: |
     server {

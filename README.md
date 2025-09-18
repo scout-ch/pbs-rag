@@ -49,13 +49,13 @@ openssl rand -hex 16 | pbcopy
 ```shell
 . .env && helm upgrade --install ragflow ./helm \
   --set ingress.host="$APP_DOMAIN" \
-  --set env.ELASTIC_PASSWORD="$ELASTIC_PASSWORD" \
-  --set env.MYSQL_HOST="$MYSQL_HOST" \
-  --set env.MYSQL_USER="$MYSQL_USER" \
-  --set env.MYSQL_PASSWORD="$MYSQL_PASSWORD" \
-  --set env.MYSQL_DBNAME="$MYSQL_DBNAME" \
-  --set env.MINIO_PASSWORD="$MINIO_PASSWORD" \
-  --set env.REDIS_PASSWORD="$REDIS_PASSWORD" \
+  --set ragflow.mysql.host="$MYSQL_HOST" \
+  --set ragflow.mysql.user="$MYSQL_USER" \
+  --set ragflow.mysql.password="$MYSQL_PASSWORD" \
+  --set ragflow.mysql.dbname="$MYSQL_DBNAME" \
+  --set elasticsearch.password="$ELASTIC_PASSWORD" \
+  --set minio.password="$MINIO_PASSWORD" \
+  --set redis.password="$REDIS_PASSWORD" \
   --set ragflow.service_conf.oauth.midata.issuer="$MIDATA_BASE_URL" \
   --set ragflow.service_conf.oauth.midata.client_id="$MIDATA_CLIENT_ID" \
   --set ragflow.service_conf.oauth.midata.client_secret="$MIDATA_CLIENT_SECRET" \

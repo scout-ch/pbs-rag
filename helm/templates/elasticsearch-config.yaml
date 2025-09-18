@@ -14,5 +14,5 @@ data:
   cluster.routing.allocation.disk.watermark.low: "5gb"
   cluster.routing.allocation.disk.watermark.high: "3gb"
   cluster.routing.allocation.disk.watermark.flood_stage: "2gb"
-  TZ: {{ .Values.env.TIMEZONE | quote }}
-  STACK_VERSION: {{ .Values.env.STACK_VERSION | quote }}
+  TZ: {{ .Values.elasticsearch.timezone | quote }}
+  STACK_VERSION: {{ .Values.elasticsearch.stackVersion | quote }}
