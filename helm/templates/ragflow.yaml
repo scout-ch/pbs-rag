@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/component: ragflow
       annotations:
         checksum/config-env: {{ include (print $.Template.BasePath "/env.yaml") . | sha256sum }}
-        checksum/config-ragflow: {{ include (print $.Template.BasePath "/ragflow_config.yaml") . | sha256sum }}
+        checksum/config-ragflow: {{ include (print $.Template.BasePath "/ragflow-config.yaml") . | sha256sum }}
     spec:
       {{- if or .Values.imagePullSecrets .Values.ragflow.image.pullSecrets }}
       imagePullSecrets:
