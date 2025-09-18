@@ -25,7 +25,7 @@ metadata:
     {{- include "ragflow.labels" . | nindent 4 }}
     app.kubernetes.io/component: minio
   annotations:
-    checksum/config: {{ include (print $.Template.BasePath "/env.yaml") . | sha256sum }}
+    checksum/minio-secrets: {{ include (print $.Template.BasePath "/minio-secrets.yaml") . | sha256sum }}
 spec:
   replicas: 1
   selector:
@@ -59,7 +59,7 @@ spec:
         {{- end }}
         envFrom:
           - secretRef:
-              name: {{ include "ragflow.fullname" . }}-env-config
+              name: {{ include "ragflow.fullname" . }}-minio-secrets
         args:
           - server
           - "--console-address=:9001"
