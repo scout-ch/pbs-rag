@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ragflow.fullname" . }}
+  name: {{ include "ragflow.fullname" . }}-taskexecutor
   labels:
     {{- include "ragflow.labels" . | nindent 4 }}
-    app.kubernetes.io/component: ragflow
+    app.kubernetes.io/component: taskexecutor
 spec:
   replicas: 1
   selector:
     matchLabels:
       {{- include "ragflow.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: ragflow
+      app.kubernetes.io/component: taskexecutor
   {{- with .Values.ragflow.deployment.strategy }}
   strategy:
     {{- . | toYaml | nindent 4 }}
@@ -20,11 +20,10 @@ spec:
     metadata:
       labels:
         {{- include "ragflow.labels" . | nindent 8 }}
-        app.kubernetes.io/component: ragflow
+        app.kubernetes.io/component: taskexecutor
       annotations:
         checksum/ragflow-secrets: {{ include (print $.Template.BasePath "/ragflow-secrets.yaml") . | sha256sum }}
         checksum/ragflow-config: {{ include (print $.Template.BasePath "/ragflow-config.yaml") . | sha256sum }}
-        checksum/ragflow-nginx-config: {{ include (print $.Template.BasePath "/ragflow-nginx-config.yaml") . | sha256sum }}
     spec:
       # Kubernetes injects service link environment variables which accidentally match the name of variables
       # expected inside the mcp server script. So we disable this legacy Kubernetes behaviour here.
@@ -39,29 +38,15 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-      - name: ragflow
+      - name: taskexecutor
         image: {{ .Values.ragflow.image.repository }}:{{ .Values.ragflow.image.tag }}
         {{- with .Values.ragflow.image.pullPolicy }}
         imagePullPolicy: {{ . }}
         {{- end }}
         command:
           - "./entrypoint.sh"
-          - "--disable-taskexecutor"
-        ports:
-          - containerPort: 80
-            name: http
-          - containerPort: 9380
-            name: http-api
+          - "--disable-webserver"
         volumeMounts:
-          - mountPath: /etc/nginx/conf.d/ragflow.conf
-            subPath: ragflow.conf
-            name: nginx-config-volume
-          - mountPath: /etc/nginx/proxy.conf
-            subPath: proxy.conf
-            name: nginx-config-volume
-          - mountPath: /etc/nginx/nginx.conf
-            subPath: nginx.conf
-            name: nginx-config-volume
           {{- with .Values.ragflow.service_conf }}
           - mountPath: /ragflow/conf/local.service_conf.yaml
             subPath: local.service_conf.yaml
@@ -82,47 +67,6 @@ spec:
           {{- . | toYaml | nindent 10 }}
         {{- end }}
       volumes:
-        - name: nginx-config-volume
-          configMap:
-            name: {{ include "ragflow.fullname" . }}-nginx-config
         - name: service-conf-volume
           configMap:
             name: {{ include "ragflow.fullname" . }}-service-config
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "ragflow.fullname" . }}
-  labels:
-    {{- include "ragflow.labels" . | nindent 4 }}
-    app.kubernetes.io/component: ragflow
-spec:
-  selector:
-    {{- include "ragflow.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: ragflow
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: http
-      name: http
-  type: {{ .Values.ragflow.service.type }}
----
-{{- if .Values.ragflow.api.service.enabled }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "ragflow.fullname" . }}-api
-  labels:
-    {{- include "ragflow.labels" . | nindent 4 }}
-    app.kubernetes.io/component: ragflow
-spec:
-  selector:
-    {{- include "ragflow.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: ragflow
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: http-api
-      name: http-api
-  type: {{ .Values.ragflow.api.service.type }}
-{{- end }}

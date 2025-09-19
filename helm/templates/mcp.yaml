@@ -18,20 +18,6 @@ spec:
         {{- include "ragflow.labels" . | nindent 8 }}
         app.kubernetes.io/component: mcp
     spec:
-      affinity:
-        podAffinity:
-          # Preferably keep MCP pods on the same node as the ragflow pods,
-          # because the image used for both is huge and we can benefit from the image cache
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app.kubernetes.io/component
-                  operator: In
-                  values:
-                  - ragflow
-              topologyKey: "kubernetes.io/hostname"
       # Kubernetes injects service link environment variables which accidentally match the name of variables
       # expected inside the mcp server script. So we disable this legacy Kubernetes behaviour here.
       enableServiceLinks: false

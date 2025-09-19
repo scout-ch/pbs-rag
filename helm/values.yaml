@@ -56,9 +56,9 @@ ragflow:
     resources:
       requests:
         memory: "1Gi"
-        cpu: "100m"
+        cpu: "200m"
       limits:
-        memory: "3Gi"
+        memory: "2Gi"
         cpu: "800m"
   service:
     # Use LoadBalancer to expose the web interface externally
