@@ -15,14 +15,30 @@ spec:
   tls:
     - hosts:
         - {{ .Values.ingress.host | quote }}
+        {{- if .Values.ragflow.mcp.enabled }}
+        - {{ .Values.ragflow.mcp.ingress.host | quote }}
+        {{- end }}
   rules:
-    - host: {{ .Values.ingress.host | quote }}
+    {{- if .Values.ragflow.mcp.enabled }}
+    - host: {{ .Values.ragflow.mcp.ingress.host | required "ragflow.mcp.ingress.host is required whan ragflow.mcp.enabled is set" | quote }}
       http:
         paths:
           - path: /
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ $.Release.Name }}
+                name: {{ include "ragflow.fullname" . }}-mcp
+                port:
+                  name: mcp
+    {{- end }}
+
+    - host: {{ .Values.ingress.host | required "ingress.host is required" | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ include "ragflow.fullname" . }}
                 port:
                   name: http
