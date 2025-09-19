@@ -80,6 +80,8 @@ ragflow:
   docBulkSize: 4
   # The number of text chunks processed in a single batch during embedding vectorization.
   embeddingBatchSize: 16
+  # Whether new users may register. 1 means activated, 0 means deactivated
+  registerEnabled: 0
 
 mcp:
   enabled: false

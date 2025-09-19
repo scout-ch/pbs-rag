@@ -20,6 +20,7 @@ data:
   ES_HOST: {{ printf "%s-es.%s.svc" (include "ragflow.fullname" .) .Release.Namespace | quote }}
   DOC_BULK_SIZE: {{ .Values.ragflow.docBulkSize | quote }}
   EMBEDDING_BATCH_SIZE: {{ .Values.ragflow.embeddingBatchSize | quote }}
+  REGISTER_ENABLED: {{ .Values.ragflow.registerEnabled | quote }}
   {{- with .Values.ragflow.hfEndpoint }}
   HF_ENDPOINT: {{ . | quote }}
   {{- end }}
