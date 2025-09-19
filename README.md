@@ -59,9 +59,9 @@ openssl rand -hex 16 | pbcopy
   --set ragflow.service_conf.oauth.midata.client_id="$MIDATA_CLIENT_ID" \
   --set ragflow.service_conf.oauth.midata.client_secret="$MIDATA_CLIENT_SECRET" \
   --set ragflow.service_conf.oauth.midata.redirect_uri="$MIDATA_OIDC_CALLBACK_URL" \
-  --set ragflow.mcp.enabled=true \
-  --set ragflow.mcp.ingress.host="$MCP_DOMAIN" \
-  --set ragflow.mcp.ragflowApiKey="$MCP_RAGFLOW_API_KEY"
+  --set mcp.enabled=true \
+  --set mcp.ingress.host="$MCP_DOMAIN" \
+  --set mcp.ragflowApiKey="$MCP_RAGFLOW_API_KEY"
 
 ## or, on subsequent deployments
 helm upgrade --reuse-values ragflow ./helm

@@ -15,12 +15,12 @@ spec:
   tls:
     - hosts:
         - {{ .Values.ingress.host | quote }}
-        {{- if .Values.ragflow.mcp.enabled }}
-        - {{ .Values.ragflow.mcp.ingress.host | quote }}
+        {{- if .Values.mcp.enabled }}
+        - {{ .Values.mcp.ingress.host | quote }}
         {{- end }}
   rules:
-    {{- if .Values.ragflow.mcp.enabled }}
-    - host: {{ .Values.ragflow.mcp.ingress.host | required "ragflow.mcp.ingress.host is required whan ragflow.mcp.enabled is set" | quote }}
+    {{- if .Values.mcp.enabled }}
+    - host: {{ .Values.mcp.ingress.host | required "mcp.ingress.host is required whan mcp.enabled is set" | quote }}
       http:
         paths:
           - path: /

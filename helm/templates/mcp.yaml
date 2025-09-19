@@ -1,4 +1,4 @@
-{{- if .Values.ragflow.mcp.enabled }}
+{{- if .Values.mcp.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -60,12 +60,12 @@ spec:
           - {{ printf "--mcp-base-url=http://%s-api" (include "ragflow.fullname" .) | quote }}
           - "--mcp-script-path=/ragflow/mcp/server/server.py"
           - "--mcp-mode=self-host"
-          - {{ (printf "--mcp-host-api-key=%s" (.Values.ragflow.mcp.ragflowApiKey | required "An API key is required when activating the MCP server")) | quote }}
+          - {{ (printf "--mcp-host-api-key=%s" (.Values.mcp.ragflowApiKey | required "An API key is required when activating the MCP server")) | quote }}
           - "--no-transport-sse-enabled"
         ports:
           - containerPort: 9382
             name: http-mcp
-        {{- with .Values.ragflow.mcp.deployment.resources }}
+        {{- with .Values.mcp.deployment.resources }}
         resources:
           {{- . | toYaml | nindent 10 }}
         {{- end }}

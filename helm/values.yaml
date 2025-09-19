@@ -34,22 +34,6 @@ ragflow:
         scope: openid email
         redirect_uri: #"https://hostname/v1/user/oauth/callback/midata"
 
-  mcp:
-    enabled: false
-    # The MCP server needs an API key to access and expose the RAGFlow API
-    ragflowApiKey: # ragflow-xxxxxxx
-    deployment:
-      strategy:
-      resources:
-        requests:
-          memory: "100Mi"
-          cpu: "50m"
-        limits:
-          memory: "200Mi"
-          cpu: "200m"
-    ingress:
-      host: ""
-
   # Optional yaml formatted override for the
   # llm_factories.json file inside the RAGFlow
   # container.
@@ -96,6 +80,22 @@ ragflow:
   docBulkSize: 4
   # The number of text chunks processed in a single batch during embedding vectorization.
   embeddingBatchSize: 16
+
+mcp:
+  enabled: false
+  # The MCP server needs an API key to access and expose the RAGFlow API
+  ragflowApiKey: # ragflow-xxxxxxx
+  deployment:
+    strategy:
+    resources:
+      requests:
+        memory: "100Mi"
+        cpu: "50m"
+      limits:
+        memory: "200Mi"
+        cpu: "200m"
+  ingress:
+    host: ""
 
 elasticsearch:
   image:
