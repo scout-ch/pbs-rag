@@ -11,15 +11,6 @@ ragflow:
     tag: v0.20.4-slim
     pullPolicy: IfNotPresent
     pullSecrets: []
-  mysql:
-    # The host of the MySQL server
-    host:
-    # The user for MySQL
-    user:
-    # The password for MySQL
-    password: infini_rag_flow_helm
-    # The database of the MySQL service to use
-    dbname: rag_flow
   # Optional service configuration overrides
   # to be written to local.service_conf.yaml
   # inside the RAGFlow container
@@ -156,6 +147,25 @@ minio:
   rootUser: rag_flow
   # The password for MinIO
   password: infini_rag_flow_helm
+
+mysql:
+  image:
+    repository: mysql
+    tag: 8.0.39
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+  storage:
+    className:
+    capacity: 5Gi
+  deployment:
+    strategy:
+    resources:
+  service:
+    type: ClusterIP
+  # The password for MySQL
+  password: infini_rag_flow_helm
+  # The database of the MySQL service to use
+  dbname: rag_flow
 
 redis:
   image:
